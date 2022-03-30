@@ -1,0 +1,96 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  transition-duration: 5000ms;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.Stat-block-chunk-header {
+  margin-bottom: 5px
+}
+
+.Stat-block-chunk {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.Stat-block-value {
+  font-weight: bolder;
+  font-size: calc(10px + 3vmin)
+}
+
+.Stat-block-value-achieved {
+  font-weight: bolder;
+  font-size: calc(14px + 3vmin);
+  color: #ff5050
+}
+
+.Stat-block {
+  padding: 10px
+}
+
+.average-duration-line {
+  stroke: #cccccc;
+}
+
+.duration-line {
+  stroke: #777777;
+  stroke-dasharray: 2
+}
+
+.target-line {
+  stroke: #99170e;
+}
+
+path {
+  fill: none;
+  stroke: white;
+}
+
+h4 {
+  padding: 0px;
+  margin: 0px;
+  color: #999999;
+}
+
+button {
+  background-color: #cc170e;
+  width: 100%;
+  color: white;
+  font-family: "Oswald", sans-serif;
+  font-size: 34px;
+  padding: 15px;
+  border: 1px solid rgb(95, 25, 25);
+  border-radius: 5px;
+  transition-duration: 100ms;
+}
+
+button:hover,
+button:focus {
+  transform: scale(1.1);
+}
+
+button:active {
+  transform: scale(.95);
+}
+
+.home-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

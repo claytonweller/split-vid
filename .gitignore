@@ -1,0 +1,23 @@
+**/node_modules
+**/.serverless
+**/coverage
+*nodejs
+.expo/
+dist/
+.dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+*.mp4
+web-build/
+.vscode
+**/coverage
+
+# macOS
+.DS_Store
+
+*.env
