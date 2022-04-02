@@ -8,9 +8,9 @@ export default function App() {
   const [videoTime, setVideoTime] = useState(0)
   const [buttonsAreVisible, setButtonsAreVisible] = useState(false)
 
-  const handleTime = (e: any) => {
+  const handleTime = (e: any, pauseTime: number) => {
     const { currentTime } = e.target
-    if (currentTime > 4) {
+    if (currentTime > pauseTime) {
       e.target.pause()
       setButtonsAreVisible(true)
     } else {
@@ -19,39 +19,48 @@ export default function App() {
     setVideoTime(currentTime)
   }
 
-  const vidIds = [
-    'vid1', 'vid2', 'vid3'
-  ]
+  const videoMap = {
+    vid1: {
+      pauseTime: 4,
+      children: ['vid2', 'vid3']
+    },
+    vid2: {
+      pauseTime: 3,
+      children: ['vid1', 'vid3']
+    },
+    vid3: {
+      pauseTime: 5,
+      children: ['vid1']
+    }
+  }
 
-  const vids = vidIds.map((vidId, i) => {
-    const isPrimary = i === primaryIndex
+  const videoEntries = Object.entries(videoMap)
+  const videoIds = videoEntries.map(([vidId]) => vidId)
+  const [primaryVidId, primaryVidDetails] = videoEntries[primaryIndex]
+
+
+  const handleChoice = (index: number) => {
+    setPrimaryIndex(index)
+    setButtonsAreVisible(false)
+  }
+
+  const vids = videoIds.map((vidId, i) => {
     const key = `vid${i}`
-    if (isPrimary) return <Video key={key} videoId={vidId} isVisible handleTime={handleTime} />
+    if (vidId === primaryVidId) return <Video pauseTime={primaryVidDetails.pauseTime} key={key} videoId={vidId} isVisible handleTime={handleTime} />
     return <Video key={key} videoId={vidId} />
   })
 
-  const choiceButtons = vidIds.reduce((buttons, vidId, i) => {
-    const isPrimary = i === primaryIndex
+  const choiceButtons = primaryVidDetails.children.map((child) => {
+    const i = videoIds.findIndex(id => id === child)
     const key = `choice${i}`
-
-    const button = <ChooseButton key={key} buttonsAreVisible={buttonsAreVisible} text={vidId} />
-    if (!isPrimary) return [...buttons, button]
-    return buttons
-  }, [] as any)
-
-
-  const handleClick = () => {
-    const nextIndex = primaryIndex + 1
-    const shouldLoopBack = nextIndex > vidIds.length - 1
-    setPrimaryIndex(shouldLoopBack ? 0 : nextIndex)
-  }
-
+    const button = <ChooseButton handleChoice={handleChoice} index={i} key={key} buttonsAreVisible={buttonsAreVisible} text={child} />
+    return button
+  })
 
   return (
     <div className="App">
       <header className="App-header">
         Split-Vid
-        <button onClick={handleClick}>swap/</button>
         <div>
           <div>Time: {videoTime}</div>
           {vids}

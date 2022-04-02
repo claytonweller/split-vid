@@ -1,9 +1,11 @@
 import React from 'react'
 
-export default function ChooseButton(props: { buttonsAreVisible?: boolean, text: string }) {
+export default function ChooseButton(props: { handleChoice: (index: number) => void, index: number, buttonsAreVisible?: boolean, text: string }) {
   const {
     buttonsAreVisible = false,
     text,
+    index,
+    handleChoice,
   } = props
 
   const buttonStyle = {
@@ -14,6 +16,6 @@ export default function ChooseButton(props: { buttonsAreVisible?: boolean, text:
   }
 
 
-  return <button style={{ ...buttonStyle }}>{text}</button>
+  return <button onClick={() => handleChoice(index)} style={{ ...buttonStyle }}>{text}</button>
 
 }
