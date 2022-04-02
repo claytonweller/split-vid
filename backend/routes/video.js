@@ -4,12 +4,12 @@ const fs = require("fs");
 router.get("/:videoId", streamVideo);
 
 function streamVideo(req, res) {
-  const range = req.headers.range;
-  const videoId = req.params.videoId;
+  const { range } = req.headers;
+  const { videoId } = req.params;
   if (!range) {
     res.status(400).send("Range not provided");
   }
-  const videoPath = __dirname + `/videos/${videoId}.mp4`;
+  const videoPath = getVideoPath(videoId);
   const videoSize = fs.statSync(videoPath).size;
   const chunkSize = 10 ** 6; // 1 mb
   const start = Number(range.replace(/\D/g, ""));
@@ -25,5 +25,17 @@ function streamVideo(req, res) {
   const videoStream = fs.createReadStream(videoPath, { start, end });
   videoStream.pipe(res);
 };
+
+function getVideoPath(videoId) {
+  const basePath = `${__dirname}/videos/${videoId}.`
+  const possibleExtensions = ['mp4', 'mov']
+  const videoPath = possibleExtensions.reduce((path, extension) => {
+    const potentialPath = basePath + extension
+    if (fs.existsSync(potentialPath)) return potentialPath
+    return path
+  }, '')
+  if (!videoPath) throw new Error('Video does not Exist!')
+  return videoPath
+}
 
 module.exports = router;
