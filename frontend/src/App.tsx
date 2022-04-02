@@ -7,17 +7,8 @@ export default function App() {
   const [primaryIndex, setPrimaryIndex] = useState(0)
   const [videoTime, setVideoTime] = useState(0)
   const [buttonsAreVisible, setButtonsAreVisible] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
 
-  const handleTime = (e: any, pauseTime: number) => {
-    const { currentTime } = e.target
-    if (currentTime > pauseTime) {
-      e.target.pause()
-      setButtonsAreVisible(true)
-    } else {
-      setButtonsAreVisible(false)
-    }
-    setVideoTime(currentTime)
-  }
 
   const videoMap = {
     vid1: {
@@ -34,21 +25,45 @@ export default function App() {
     }
   }
 
+  const handleTime = (e: any, pauseTime: number) => {
+    const { currentTime } = e.target
+    if (currentTime > pauseTime) {
+      e.target.pause()
+      setButtonsAreVisible(true)
+    } else {
+      setButtonsAreVisible(false)
+    }
+    setVideoTime(currentTime)
+  }
+
   const videoEntries = Object.entries(videoMap)
   const videoIds = videoEntries.map(([vidId]) => vidId)
   const [primaryVidId, primaryVidDetails] = videoEntries[primaryIndex]
 
+  const vids = videoIds.map((vidId, i) => {
+    const key = `vid${i}`
+    if (vidId === primaryVidId) return (
+      <Video
+        pauseTime={primaryVidDetails.pauseTime}
+        key={key}
+        videoId={vidId}
+        isVisible
+        handleTime={handleTime}
+        isPlaying={isPlaying}
+      />
+    )
+    return <Video key={key} videoId={vidId} isPlaying={false} />
+  })
 
   const handleChoice = (index: number) => {
     setPrimaryIndex(index)
     setButtonsAreVisible(false)
+    setIsPlaying(true)
   }
 
-  const vids = videoIds.map((vidId, i) => {
-    const key = `vid${i}`
-    if (vidId === primaryVidId) return <Video pauseTime={primaryVidDetails.pauseTime} key={key} videoId={vidId} isVisible handleTime={handleTime} />
-    return <Video key={key} videoId={vidId} />
-  })
+
+
+
 
   const choiceButtons = primaryVidDetails.children.map((child) => {
     const i = videoIds.findIndex(id => id === child)
@@ -56,6 +71,10 @@ export default function App() {
     const button = <ChooseButton handleChoice={handleChoice} index={i} key={key} buttonsAreVisible={buttonsAreVisible} text={child} />
     return button
   })
+
+
+
+
 
   return (
     <div className="App">
